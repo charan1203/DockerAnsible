@@ -1,0 +1,49 @@
+---
+- name: Install Docker
+  hosts: docker_server
+  become: yes
+  tasks:
+  - name: Install Docker
+    apt:
+      name: 
+      - docker
+      update_cache: yes
+      state: present 
+
+- name: Install Docker-Compose
+  hosts: docker_server
+  become: yes
+  tasks:
+  - name: Install Docker-Compose
+    get_url:
+      url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: +x
+
+- name: Start Docker
+  hosts: docker_server
+  become: yes
+  tasks:
+    - name: Start Docker daemon 
+      systemd: 
+        name: docker
+        state: started
+
+
+- name: Add User to docker Group
+  hosts: docker_server
+  become: yes
+  tasks:
+    - name: Add User to docker Group
+      user:
+        name: Charanadmin
+        groups: docker
+        append: yes
+    - name: reconnect to server 
+      meta: reset_connection    
+
+- name: test Docker Pull
+  hosts: docker_server
+  tasks:
+    - name: Pull Redis 
+      command: docker pull redis 
