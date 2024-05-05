@@ -20,21 +20,16 @@
       dest: /usr/local/bin/docker-compose
       mode: +x
 
-- name: Start Docker
+- name: Ensure Docker Group Exists and Add User to It
   hosts: docker_server
   become: yes
   tasks:
-    - name: Start Docker daemon 
-      systemd: 
+    - name: Ensure Docker group exists
+      group:
         name: docker
-        state: started
+        state: present
 
-
-- name: Add User to docker Group
-  hosts: docker_server
-  become: yes
-  tasks:
-    - name: Add User to docker Group
+    - name: Add user to Docker group
       user:
         name: Charanadmin
         groups: docker
@@ -44,6 +39,7 @@
 
 - name: test Docker Pull
   hosts: docker_server
+  become: yes
   tasks:
     - name: Pull Redis 
       command: docker pull redis 
