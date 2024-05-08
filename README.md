@@ -1,4 +1,4 @@
-Automated Azure VM Setup & Docker Environment Configuration
+Enterprise Automated Docker Deployment on Cloud Platforms using Ansible
 
 This project automates the deployment of a development environment on Azure using Terraform and Ansible. It includes:
 
